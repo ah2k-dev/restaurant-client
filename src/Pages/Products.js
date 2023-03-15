@@ -2,6 +2,7 @@ import { Button, Col, Row, Spin, Typography } from "antd";
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import AddProductModal from "../Components/AddProductModal";
+import { addItem } from "../Redux/Actions/cartActions";
 import { deleteProduct, getAllProducts } from "../Redux/Actions/productActions";
 
 const Products = () => {
@@ -53,7 +54,9 @@ const Products = () => {
                     </div>
                     <div className="product-actions">
                       {user?.role !== "admin" && (
-                        <Button type="primary" disabled={!isAuthenticated}>
+                        <Button type="primary" disabled={!isAuthenticated} onClick={()=>{
+                          dispatch(addItem(product))
+                        }}>
                           Add to Cart
                         </Button>
                       )}

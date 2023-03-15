@@ -1,4 +1,4 @@
-import { Col, Dropdown, Row, Button } from "antd";
+import { Col, Dropdown, Row, Button, Badge } from "antd";
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { FaUserAlt } from "react-icons/fa";
@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { logout } from "../Redux/Actions/authActions";
 const Header = () => {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const { length } = useSelector((state) => state.cart);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const items = [
@@ -67,9 +68,22 @@ const Header = () => {
               <>
                 {user && user.role === "user" && (
                   <Col span={3}>
-                    <a onClick={() => navigate("/cart")} className="link">
-                      Cart
-                    </a>
+                    <Badge
+                      count={length}
+                      style={{
+                        marginTop: 7,
+                      }}
+                    >
+                      <a
+                        onClick={() => navigate("/cart")}
+                        className="link"
+                        style={{
+                          marginRight: 14,
+                        }}
+                      >
+                        Cart
+                      </a>
+                    </Badge>
                   </Col>
                 )}
                 <Col span={3}>
