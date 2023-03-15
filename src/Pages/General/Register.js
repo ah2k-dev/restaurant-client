@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 import { Typography, Form, Row, Col, Input, Button } from "antd";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { register } from "../../Redux/Actions/authActions";
 
 const Register = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.auth);
   useEffect(() => {
     if (isAuthenticated) {
@@ -12,8 +14,11 @@ const Register = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  const onFinish = (values) => {
-    console.log("Success:", values);
+  const onFinish = async (values) => {
+    const res = await dispatch(register(values));
+    if (res) {
+      navigate("/verify-email");
+    }
   };
   return (
     <div className="container page">

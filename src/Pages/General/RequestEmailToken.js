@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 import { Typography, Form, Row, Col, Input, Button } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { forgotPassword, requestEmailToken } from "../../Redux/Actions/authActions";
 
 const RequestEmailToken = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { pathname } = useLocation();
   const { isAuthenticated } = useSelector((state) => state.auth);
   useEffect(() => {
@@ -12,11 +14,19 @@ const RequestEmailToken = () => {
       navigate("/");
     }
   }, [isAuthenticated, navigate]);
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     if (pathname.includes("forgot")) {
       console.log("forgot password");
+      const res = await dispatch(forgotPassword(values));
+      if (res) {
+        navigate("/reset-password", { state: { email: values.email } });
+      }
     } else {
       console.log("verify email");
+      const res = await dispatch(requestEmailToken(values));
+      if (res) {
+        navigate("/verify-email", { state: { email: values.email } });
+      }
     }
   };
 

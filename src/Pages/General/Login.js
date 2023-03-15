@@ -1,8 +1,10 @@
 import { Button, Col, Form, Input, Row, Typography } from "antd";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { login } from "../../Redux/Actions/authActions";
 const Login = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isAuthenticated, verifyEmail } = useSelector((state) => state.auth);
   useEffect(() => {
@@ -12,7 +14,7 @@ const Login = () => {
   }, [isAuthenticated, navigate]);
 
   const onFinish = (values) => {
-    console.log("Success:", values);
+    dispatch(login(values));
   };
   return (
     <div className="container page">

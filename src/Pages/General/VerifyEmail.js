@@ -1,13 +1,25 @@
 import React, { useEffect } from "react";
 import { Form, Input, Button, Typography, Row, Col } from "antd";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { verifyEmail } from "../../Redux/Actions/authActions";
 
 const VerifyEmail = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { state } = useLocation();
   const { isAuthenticated } = useSelector((state) => state.auth);
-  const onFinish = (values) => {
-    console.log("Success:", values);
+  const onFinish = async (values) => {
+    console.log("Success:", Number(values.token));
+    const res = await dispatch(
+      verifyEmail({
+        emailVerificationToken: Number(values.token),
+        email: state?.email,
+      })
+    );
+    if (res) {
+      navigate("/login");
+    }
   };
   useEffect(() => {
     if (isAuthenticated) {
@@ -38,7 +50,7 @@ const VerifyEmail = () => {
                   },
                 ]}
               >
-                <Input type="email" placeholder="Token" />
+                <Input type="number" placeholder="Token" />
               </Form.Item>
             </Col>
             <Col span={24}>

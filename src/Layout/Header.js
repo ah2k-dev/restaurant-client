@@ -1,12 +1,14 @@
 import { Col, Dropdown, Row, Button } from "antd";
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { FaUserAlt } from "react-icons/fa";
 import { IoIosArrowDropdownCircle } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import { logout } from "../Redux/Actions/authActions";
 const Header = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const items = [
     {
       key: "1",
@@ -38,9 +40,9 @@ const Header = () => {
       key: "1",
       label: (
         <a
-          href=""
           onClick={() => {
             // logout api call
+            dispatch(logout())
           }}
         >
           Logout
