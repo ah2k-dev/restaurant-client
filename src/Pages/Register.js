@@ -1,35 +1,29 @@
 import React, { useEffect } from "react";
 import { Typography, Form, Row, Col, Input, Button } from "antd";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { resetPassword } from "../../Redux/Actions/authActions";
+import { register } from "../Redux/Actions/authActions";
 
-const ResetPassword = () => {
+const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { state } = useLocation();
   const { isAuthenticated } = useSelector((state) => state.auth);
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/");
     }
   }, [isAuthenticated, navigate]);
-  const onFinish = (values) => {
-    const res = dispatch(
-      resetPassword({
-        resetPasswordToken: values.token,
-        password: values.password,
-        email: state?.email,
-      })
-    );
+
+  const onFinish = async (values) => {
+    const res = await dispatch(register(values));
     if (res) {
-      navigate("/login");
+      navigate("/verify-email");
     }
   };
   return (
     <div className="container page">
       <div className="box">
-        <Typography.Title level={3}>Reset Password</Typography.Title>
+        <Typography.Title level={3}>Sign Up</Typography.Title>
         <Form
           style={{
             width: "70%",
@@ -41,15 +35,28 @@ const ResetPassword = () => {
           <Row>
             <Col span={24}>
               <Form.Item
-                name="token"
+                name="name"
                 rules={[
                   {
                     required: true,
-                    message: "Please input token!",
+                    message: "Please input your name!",
                   },
                 ]}
               >
-                <Input type="number" placeholder="Token" />
+                <Input type="text" placeholder="Name" />
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <Form.Item
+                name="email"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your email!",
+                  },
+                ]}
+              >
+                <Input type="email" placeholder="Email" />
               </Form.Item>
             </Col>
             <Col
@@ -70,31 +77,24 @@ const ResetPassword = () => {
                 <Input.Password placeholder="Password" />
               </Form.Item>
             </Col>
-            <Col
-              span={24}
-              style={{
-                padding: 0,
-              }}
-            >
-              <Form.Item
-                name="confirmPassword"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your password again!",
-                  },
-                ]}
-              >
-                <Input.Password placeholder="Confirm Password" />
-              </Form.Item>
-            </Col>
             <Col span={24}>
               <div
                 style={{
                   display: "flex",
-                  justifyContent: "flex-end",
+                  justifyContent: "space-between",
                 }}
               >
+                <a
+                  onClick={() => {
+                    navigate("/login");
+                  }}
+                  style={{
+                    textAlign: "right",
+                    display: "block",
+                  }}
+                >
+                  Already have an account? Login!
+                </a>
                 <Form.Item>
                   <Button type="primary" htmlType="submit">
                     Submit
@@ -109,4 +109,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default Register;

@@ -2,7 +2,7 @@ import { Button, Col, Form, Input, Row, Typography } from "antd";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { login } from "../../Redux/Actions/authActions";
+import { login } from "../Redux/Actions/authActions";
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();

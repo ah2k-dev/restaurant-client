@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Typography, Form, Row, Col, Input, Button } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { forgotPassword, requestEmailToken } from "../../Redux/Actions/authActions";
+import { forgotPassword, requestEmailToken } from "../Redux/Actions/authActions";
 
 const RequestEmailToken = () => {
   const navigate = useNavigate();

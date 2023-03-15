@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Form, Input, Button, Typography, Row, Col } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { verifyEmail } from "../../Redux/Actions/authActions";
+import { verifyEmail } from "../Redux/Actions/authActions";
 
 const VerifyEmail = () => {
   const navigate = useNavigate();
