@@ -9,10 +9,6 @@
   border-radius: 5px;
 }
 
-.cart-product-image {
-  /* width: 100px; */
-  /* height: 100px; */
-}
 
 .cart-product-image > img {
   object-fit: cover;

@@ -6,11 +6,15 @@ import {
   removeItem,
   saveShippingAddress,
 } from "../Redux/Actions/cartActions";
+import { createOrder } from "../Redux/Actions/orderActions";
+import { useNavigate } from "react-router-dom";
 const Cart = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { cartItems, total, shippingAddress, length } = useSelector(
     (state) => state.cart
   );
+  const { user } = useSelector((state) => state.auth);
   return (
     <div className="container page">
       <div className="box">
@@ -128,7 +132,7 @@ const Cart = () => {
         >
           <Button
             type="primary"
-            onClick={() => {
+            onClick={async () => {
               let payload = {
                 totalPrice: total,
                 shippingAddress: shippingAddress,
@@ -141,7 +145,15 @@ const Cart = () => {
                   total: cartItems[key].totalPrice,
                 });
               });
-              console.log(payload)
+              const res = await dispatch(
+                createOrder(
+                  payload,
+                  `${user && user.role === "admin" ? "admin" : "user"}`
+                )
+              );
+              if (res) {
+                navigate("/orders");
+              }
             }}
             disabled={length === 0 || shippingAddress === ""}
           >
