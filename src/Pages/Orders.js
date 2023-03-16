@@ -6,17 +6,26 @@ import {
   deleteOrder,
   getAllOrders,
   getCustomerOrders,
+  payment,
   updateOrder,
 } from "../Redux/Actions/orderActions";
 import { AiFillEye, AiOutlineDelete } from "react-icons/ai";
 import {} from "antd";
 import ViewOrderModal from "../Components/ViewOrderModal";
-import PaymentModal from "../Components/PaymentModal";
+import StripeCheckout from "react-stripe-checkout";
 
 const Orders = () => {
   const { orders } = useSelector((state) => state.order);
   const { user } = useSelector((state) => state.auth);
+  const [paymentData, setPaymentData] = useState();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (paymentData) {
+      console.log(paymentData)
+      dispatch(payment(paymentData.token, paymentData.id));
+    }
+  }, [paymentData]);
   const userColumns = [
     {
       title: "Order Id",
@@ -36,7 +45,29 @@ const Orders = () => {
         let disable = false;
         let nestedDisable = [];
         if (text == "paymentPending") {
-          return <PaymentModal order={record} />;
+          return (
+            <StripeCheckout
+              stripeKey="pk_test_51MmD7AKWp5Tqj00g372akif5TlPohMNRZLW0KOjMgtOT0ygKngAPaRwV88dPn2T6y0eiSjv5eagNkCjvqhkKkCJG00UwbrpTSJ"
+              name="Restaurant App"
+              description="Order checkout"
+              token={(token) => {
+                setPaymentData({
+                  token: {...token, amount: record.totalPrice * 100},
+                  id: record._id,
+                });
+              }}
+              amount={record.totalPrice * 100}
+              currency="USD"
+              billingAddress
+              shippingAddress
+            >
+              {/* <Form.Item> */}
+              <Button type="primary" htmlType="submit">
+                Pay Now
+              </Button>
+              {/* </Form.Item> */}
+            </StripeCheckout>
+          );
         }
         if (text == "delivered" || text == "cancelled" || text == "pending") {
           disable = true;

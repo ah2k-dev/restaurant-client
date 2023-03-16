@@ -134,3 +134,24 @@ export const deleteOrder = (id, type) => {
     }
   };
 };
+
+export const payment = (data, id) => {
+  console.log("in");
+  return async (dispatch) => {
+    dispatch({ type: orderConstants.PAYMENT_REQUEST });
+    try {
+      await attachToken();
+      // const res = await privateAPI.post("/order/payment/", data);
+      const res = await privateAPI.post(`/order/pay/${id}`, data);
+      if (res.status === 200) {
+        dispatch({
+          type: orderConstants.PAYMENT_SUCCESS,
+        });
+        swal("Success", "Payment Successfull", "success");
+        dispatch(getCustomerOrders());
+      }
+    } catch (error) {
+      swal("Error", error?.response?.data?.message || "Server Error", "error");
+    }
+  };
+};
